@@ -177,6 +177,8 @@ extension XWVHttpServer : XWVHttpConnectionDelegate {
         } else if request.HTTPMethod == "GET" || request.HTTPMethod == "HEAD" {
             let fileManager = NSFileManager.defaultManager()
             let relativePath = String(request.URL!.path!.characters.dropFirst())
+            // SDG: bug fix for crash when relativePath contains spaces.
+            relativePath = relativePath.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
             for baseURL in overlays {
                 var isDirectory: ObjCBool = false
                 var url = NSURL(string: relativePath, relativeToURL: baseURL)!

@@ -178,7 +178,7 @@ extension XWVHttpServer : XWVHttpConnectionDelegate {
             let fileManager = FileManager.default
             var relativePath = String(request.url!.path.characters.dropFirst())
 			// SDG: bug fix for crash when relativePath contains spaces.
-			relativePath = relativePath.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+			relativePath = relativePath.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
             for baseURL in overlays {
                 var isDirectory: ObjCBool = false
                 var url = URL(string: relativePath, relativeTo: baseURL)!

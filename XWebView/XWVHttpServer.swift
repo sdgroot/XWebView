@@ -176,7 +176,9 @@ extension XWVHttpServer : XWVHttpConnectionDelegate {
             log("?Bad request")
         } else if let request = request, request.httpMethod == "GET" || request.httpMethod == "HEAD" {
             let fileManager = FileManager.default
-            let relativePath = String(request.url!.path.characters.dropFirst())
+            var relativePath = String(request.url!.path.characters.dropFirst())
+			// SDG: bug fix for crash when relativePath contains spaces.
+			relativePath = relativePath.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
             for baseURL in overlays {
                 var isDirectory: ObjCBool = false
                 var url = URL(string: relativePath, relativeTo: baseURL)!
